@@ -16,16 +16,42 @@ jobs:
         with:
            submodules: true
 
-      - name: clone build script
+      - name: install boost
         run: |
-          cd ..
-          mkdir -p ios/src
-          mv ./libtorrent ios/src/
-          git clone https://github.com/publicissapient-france/libtorrent-ios-resources.git
-          mv libtorrent-ios-resources/build-script/* ios/
-          cd ios/
-          make
-          rm -rf .build/
+          git clone --depth=1 --recurse-submodules -j10 --branch=boost-1.78.0 https://github.com/boostorg/boost.git
+          cd boost
+          ./bootstrap.sh
+
+      - name: boost headers
+        run: |
+          cd boost
+          ./b2 headers
+          cp b2 ..
+
+      - name: user-config
+        run: |
+          echo "using darwin : ios_sim : clang++ : <compileflags>-Wno-deprecated-declarations
+          <compileflags>\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk\"
+          <compileflags>-mios-simulator-version-min=7
+          <compileflags>-fobjc-abi-version=2
+          <linkflags>\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk\"
+          <linkflags>-mios-simulator-version-min=7
+          <linkflags>-fobjc-abi-version=2 ;" >>~/user-config.jam;
+
+          echo "using darwin : ios : clang++ : <compileflags>-Wno-deprecated-declarations
+          <compileflags>\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk\"
+          <compileflags>-mios-version-min=9
+          <compileflags>\"-arch arm64\"
+          <compileflags>-fobjc-abi-version=2
+          <linkflags>\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk\"
+          <linkflags>-mios-version-min=9
+          <linkflags>\"-arch arm64\"
+          <linkflags>-fobjc-abi-version=2 ;" >>~/user-config.jam;
+
+      - name: build library
+        run: |
+          BOOST_ROOT=boost ./b2 -l400 cxxstd=14 target-os=iphone crypto=built-in darwin-ios darwin-ios_sim address-model=64  link=static
+          ls -l
           
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.0.0
@@ -33,5 +59,4 @@ jobs:
           # Artifact name
           name: libtorrent
           # A file, directory or wildcard pattern that describes what to upload
-          path: /Users/runner/work/libtorrent/ios/
-          
+          path: /Users/runner/work/libtorrent/libtorrent/bin
