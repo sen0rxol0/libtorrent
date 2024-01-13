@@ -40,17 +40,17 @@ jobs:
 
           echo "using darwin : ios : clang++ : <compileflags>-Wno-deprecated-declarations
           <compileflags>\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk\"
-          <compileflags>-mios-version-min=9
+          <compileflags>-mios-version-min=11
           <compileflags>\"-arch arm64\"
           <compileflags>-fobjc-abi-version=2
           <linkflags>\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk\"
-          <linkflags>-mios-version-min=9
+          <linkflags>-mios-version-min=11
           <linkflags>\"-arch arm64\"
           <linkflags>-fobjc-abi-version=2 ;" >>~/user-config.jam;
 
       - name: build library
         run: |
-          BOOST_ROOT=boost ./b2 -l400 cxxstd=14 target-os=iphone crypto=built-in darwin-ios darwin-ios_sim address-model=64  link=static
+          BOOST_ROOT=boost ./b2 -j8 cxxflags="-std=c++11 -stdlib=libc++" architecture=arm target-os=iphone toolset=darwin crypto=built-in address-model=64 link=static
           ls -l
           
       - name: Upload a Build Artifact
