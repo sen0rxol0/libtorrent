@@ -50,7 +50,8 @@ jobs:
 
       - name: build library
         run: |
-          BOOST_ROOT=boost ./b2 -j8 cxxflags="-std=c++11 -stdlib=libc++" architecture=arm target-os=iphone toolset=darwin crypto=built-in darwin-ios address-model=64 link=static
+          BOOST_ROOT=boost ./b2 --with-system --with-thread --with-date_time --with-regex --with-serialization stage
+          # BOOST_ROOT=boost ./b2 -j8 cxxflags="-std=c++11 -stdlib=libc++" architecture=arm target-os=iphone toolset=darwin crypto=built-in darwin-ios address-model=64 link=static
           ls -l
           
       - name: Upload a Build Artifact
