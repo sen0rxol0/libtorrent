@@ -28,6 +28,7 @@ jobs:
           ./b2 headers
           ./b2 --with-system --with-thread --with-date_time --with-regex --with-serialization architecture=arm address-model=64 target-os=iphone toolset=darwin stage
           cp b2 ..
+          ls -l
 
       - name: user-config
         run: |
@@ -60,5 +61,5 @@ jobs:
           # Artifact name
           name: libtorrent
           # A file, directory or wildcard pattern that describes what to upload
-          path: /Users/runner/work/libtorrent/libtorrent/stage
+          path: /Users/runner/work/libtorrent/libtorrent/boost/stage
           
