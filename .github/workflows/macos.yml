@@ -42,7 +42,7 @@ jobs:
 
       - name: build library
         run: |
-          BOOST_ROOT=boost ./b2 -l400 darwin-ios cxxflags="-std=c++11 -stdlib=libc++" target-os=iphone address-model=64 crypto=built-in variant=release link=static
+          BOOST_ROOT=boost ./b2 cxxflags="-std=c++11 -stdlib=libc++" target-os=iphone address-model=64 crypto=built-in link=static darwin-ios
           ls -l
           
       - name: Upload a Build Artifact
