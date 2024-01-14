@@ -54,7 +54,7 @@ jobs:
       - name: build library
         run: |
           cd boost
-          ./b2 -a -j4 cxxflags="-std=c++11 -stdlib=libc++" toolset=darwin-ios binary-format=mach-o abi=aapcs link=static
+          ./b2 -a -j4 cxxflags="-std=c++11 -stdlib=libc++" toolset=darwin binary-format=mach-o abi=aapcs link=static
           ls -l
           
       - name: Upload a Build Artifact
