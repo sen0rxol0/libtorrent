@@ -18,28 +18,19 @@ jobs:
 
       - name: install boost
         run: |
-          git clone --depth=1 --recurse-submodules -j10 --branch=boost-1.78.0 https://github.com/boostorg/boost.git
+          git clone --depth=1 --recurse-submodules -j10 --branch=boost-1.64.0 https://github.com/boostorg/boost.git
           cd boost
+          # ./bootstrap.sh --with-libraries=system,thread,date_time,regex,serialization 
           ./bootstrap.sh
-
-      - name: boost headers
-        run: |
-          cd boost
-          ./b2 headers
-          ./b2 --with-system --with-thread --with-date_time --with-regex --with-serialization architecture=arm address-model=64 target-os=iphone toolset=darwin stage
-          cp b2 ..
-          ls -l
+          
+      # - name: boost headers
+      #   run: |
+      #     cd boost
+      #     ./b2 headers
 
       - name: user-config
         run: |
-          # echo "using darwin : ios_sim : clang++ : <compileflags>-Wno-deprecated-declarations
-          # <compileflags>\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk\"
-          # <compileflags>-mios-simulator-version-min=7
-          # <compileflags>-fobjc-abi-version=2
-          # <linkflags>\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk\"
-          # <linkflags>-mios-simulator-version-min=7
-          # <linkflags>-fobjc-abi-version=2 ;" >>~/user-config.jam;
-
+          cd boost
           echo "using darwin : ios : clang++ : <compileflags>-Wno-deprecated-declarations
           <compileflags>\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk\"
           <compileflags>-mios-version-min=11
@@ -50,9 +41,20 @@ jobs:
           <linkflags>\"-arch arm64\"
           <linkflags>-fobjc-abi-version=2 ;" >>~/user-config.jam;
 
+          # echo "using darwin : ios : clang++ : <compileflags>-Wno-deprecated-declarations
+          # <compileflags>\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk\"
+          # <compileflags>-mios-version-min=11
+          # <compileflags>\"-arch arm64\"
+          # <compileflags>-fobjc-abi-version=2
+          # <linkflags>\"-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk\"
+          # <linkflags>-mios-version-min=11
+          # <linkflags>\"-arch arm64\"
+          # <linkflags>-fobjc-abi-version=2 ;" >>~/user-config.jam;
+
       - name: build library
         run: |
-          # BOOST_ROOT=boost ./b2 -j8 cxxflags="-std=c++11 -stdlib=libc++" architecture=arm target-os=iphone toolset=darwin crypto=built-in darwin-ios address-model=64 link=static
+          cd boost
+          ./b2 -a -j4 cxxflags="-std=c++11 -stdlib=libc++" toolset=darwin-ios binary-format=mach-o abi=aapcs link=static
           ls -l
           
       - name: Upload a Build Artifact
