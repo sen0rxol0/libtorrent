@@ -42,7 +42,7 @@ jobs:
 
       - name: build library
         run: |
-          BOOST_ROOT=boost ./b2 -l400 cxxstd=14 target-os=iphone crypto=built-in toolset=darwin binary-format=mach-o abi=aapcs address-model=64 link=static library
+          BOOST_ROOT=boost ./b2 -l400 cxxstd=14 target-os=iphone crypto=built-in toolset=darwin binary-format=mach-o abi=aapcs address-model=64 link=static
           ls -l
           
       - name: Upload a Build Artifact
@@ -51,4 +51,4 @@ jobs:
           # Artifact name
           name: libtorrent
           # A file, directory or wildcard pattern that describes what to upload
-          path: /Users/runner/work/libtorrent/libtorrent/library
+          path: /Users/runner/work/libtorrent/libtorrent/bin
