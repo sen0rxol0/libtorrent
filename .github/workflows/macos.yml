@@ -54,7 +54,7 @@ jobs:
       - name: build library
         run: |
           cd boost
-          ./b2 -a -j4 cxxflags="-std=c++11 -stdlib=libc++" toolset=darwin binary-format=mach-o abi=aapcs link=static
+          ./b2 -j4 cxxflags="-std=c++11 -stdlib=libc++" target-os=iphone toolset=darwin architecture=arm address-model=64 binary-format=mach-o abi=aapcs link=static variant=release state
           ls -l
           
       - name: Upload a Build Artifact
