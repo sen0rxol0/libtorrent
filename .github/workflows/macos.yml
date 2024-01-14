@@ -42,7 +42,7 @@ jobs:
 
       - name: build library
         run: |
-          BOOST_ROOT=boost ./b2 -l400 cxxstd=14 target-os=iphone crypto=built-in darwin-ios address-model=64 variant=release link=static
+          BOOST_ROOT=boost ./b2 -l400 cxxstd=14 target-os=iphone crypto=built-in darwin-ios address-model=64 link=static
           ls -l
           
       - name: Upload a Build Artifact
