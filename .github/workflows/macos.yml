@@ -42,7 +42,7 @@ jobs:
 
       - name: build library
         run: |
-          BOOST_ROOT=boost ./b2 cxxflags="-std=c++11 -stdlib=libc++" target-os=iphone toolset=darwin architecture=arm address-model=64 binary-format=mach-o crypto=built-in abi=aapcs link=static
+          BOOST_ROOT=boost ./b2 cxxflags="-std=c++11 -stdlib=libc++" target-os=iphone toolset=darwin architecture=arm address-model=64 binary-format=mach-o crypto=built-in variant=release link=static
           ls -l
           
       - name: Upload a Build Artifact
