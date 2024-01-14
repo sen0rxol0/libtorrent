@@ -8,7 +8,7 @@ jobs:
    ios_build:
       name: Build iOS
       runs-on: macos-latest
-      continue-on-error: true
+      continue-on-error: false
 
       steps:
       - name: checkout
